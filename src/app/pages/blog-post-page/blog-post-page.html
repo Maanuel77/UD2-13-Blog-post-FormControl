@@ -1,0 +1,60 @@
+<div class="container my-5" style="max-width: 700px">
+  <form class="card shadow p-4" (submit)="$event.preventDefault(); publicar()">
+    <h1 class="text-center text-primary mb-4">Nueva publicación</h1>
+
+    <div class="mb-3">
+      <label class="form-label">Título</label>
+      <input type="text" class="form-control" [formControl]="title">
+      @if (title.invalid && title.touched) { <small class="text-danger">El título es obligatorio</small> }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Descripción</label>
+      <textarea rows="4" class="form-control" [formControl]="description"></textarea>
+      @if (description.invalid && description.touched) { <small class="text-danger">La descripción es obligatoria</small> }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Categoría</label>
+      <select class="form-select" [formControl]="category">
+        <option value="">Selecciona una categoría</option>
+        @for (cat of categorias; track cat) { <option [value]="cat">{{ cat }}</option> }
+      </select>
+      @if (category.invalid && category.touched) { <small class="text-danger">Selecciona una categoría</small> }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Etiquetas (separadas por comas)</label>
+      <input type="text" class="form-control" [formControl]="tags" placeholder="angular, forms, web">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Email del autor</label>
+      <input type="email" class="form-control" [formControl]="email">
+      @if (email.hasError('required') && email.touched) { <small class="text-danger">El email es obligatorio</small> }
+      @if (email.hasError('email') && email.touched) { <small class="text-danger">Formato de email no válido</small> }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label d-block">Publicación</label>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="ahora" [formControl]="publishNow" [value]="true">
+        <label class="form-check-label" for="ahora">Publicar ahora</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="programar" [formControl]="publishNow" [value]="false">
+        <label class="form-check-label" for="programar">Programar fecha</label>
+      </div>
+      <input type="date" class="form-control mt-2" [formControl]="publishDate">
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100" [disabled]="!formularioValido">Publicar</button>
+  </form>
+
+  @if (publicado) {
+    <div class="card mt-4 p-3">
+      <h5>Datos enviados</h5>
+      <pre class="mb-0">{{ publicado | json }}</pre>
+    </div>
+  }
+</div>
